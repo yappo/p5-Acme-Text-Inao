@@ -1,0 +1,17 @@
+NAME
+    Acme::Text::Inao -
+
+SYNOPSIS
+      use Acme::Text::Inao;
+
+DESCRIPTION
+    Acme::Text::Inao is
+
+AUTHOR
+    Default Name <default {at} example.com>
+
+SEE ALSO
+LICENSE
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+

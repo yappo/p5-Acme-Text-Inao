@@ -1,0 +1,26 @@
+=head1 NAME
+
+Acme::Text::Inao -
+
+=head1 SYNOPSIS
+
+  use Acme::Text::Inao;
+
+=head1 DESCRIPTION
+
+Acme::Text::Inao is
+
+=head1 AUTHOR
+
+Default Name E<lt>default {at} example.comE<gt>
+
+=head1 SEE ALSO
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+
+=cut
+
