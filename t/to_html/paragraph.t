@@ -51,9 +51,13 @@ subtest 'パラグラフ2個 空行混み' => sub {
 };
 
 subtest 'タグ付きパラグラフ' => sub {
+    my $text     = "　文章の${rhombus}b/${rhombus}強調している、文章なんです。${rhombus}/b${rhombus}だよ。\n";
+    my $expected = "<P>　文章の<B>強調している、文章なんです。</B>だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
     my $text     = "　文章の${rhombus}b/${rhombus}強調${rhombus}/b${rhombus}だよ。\n";
     my $expected = "<P>　文章の<B>強調</B>だよ。</P>\n";
-    is $inao->from_inao($text)->to_html, $expected;
+#    is $inao->from_inao($text)->to_html, $expected;
     done_testing;
 };
 
