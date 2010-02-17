@@ -6,6 +6,7 @@ our $VERSION = '0.01';
 use Parse::RecDescent;
 
 use Acme::Text::Inao::HTML;
+use Acme::Text::Inao::Status;
 
 use utf8;
 $::RD_HINT = 1;
@@ -133,6 +134,13 @@ sub from_inao {
 sub to_html {
     my $self = shift;
     Acme::Text::Inao::HTML->new->walk($self->{parsed}->{data});
+}
+
+sub to_status {
+    my $self = shift;
+    my $status = Acme::Text::Inao::Status->new;
+    $status->walk($self->{parsed}->{data});
+    $status->status;
 }
 
 1;
