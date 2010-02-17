@@ -30,13 +30,13 @@ my $_inao_syntax = q(
 my $inao_syntax = q(
 
     section1: head1 content1(s) { $return = { data => [ @item ] } }
-    content1:
-              paragraph(s) { $return = { data => [ @item ] } }
+    content1: section2(s)  { $return = { data => [ @item ] } }
+            | paragraph(s) { $return = { data => [ @item ] } }
             | list(s)      { $return = { data => [ @item ] } }
             | ul(s)        { $return = { data => [ @item ] } }
     section2: head2 content2(s) { $return = { data => [ @item ] } }
-    content2:
-              paragraph(s) { $return = { data => [ @item ] } }
+    content2: section3(s)  { $return = { data => [ @item ] } }
+            | paragraph(s) { $return = { data => [ @item ] } }
             | list(s)      { $return = { data => [ @item ] } }
             | ul(s)        { $return = { data => [ @item ] } }
     section3: head3 content3(s) { $return = { data => [ @item ] } }

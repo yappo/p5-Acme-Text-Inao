@@ -16,6 +16,28 @@ subtest 'head1' => sub {
     my $expected = "<H1>最初</H1>\n<P>　文章が始まります。</P>\n<UL><LI>りすとです</LI></UL>\n<P>　本文です。</P>\n<PRE>コードです</PRE>\n<P>　おしまい。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
 
+    $text     = "
+${square}一段落
+
+　よろしく。
+
+${square}${square}二段落-1
+
+　うーん。
+
+${square}${square}二段落-2
+
+　どうしよう。
+";
+    $expected = "<H1>一段落</H1>
+<P>　よろしく。</P>
+<H2>二段落-1</H2>
+<P>　うーん。</P>
+<H2>二段落-2</H2>
+<P>　どうしよう。</P>
+";
+    is $inao->from_inao($text)->to_html, $expected;
+
     done_testing;
 };
 
@@ -24,6 +46,28 @@ subtest 'head2' => sub {
 
     my $text     = "\n${square}${square}最初\n\n　文章が始まります。\n\n${li_dot}りすとです\n\n　本文です。\n\n${rhombus}list/${rhombus}\nコードです\n${rhombus}/list${rhombus}\n\n　おしまい。\n";
     my $expected = "<H2>最初</H2>\n<P>　文章が始まります。</P>\n<UL><LI>りすとです</LI></UL>\n<P>　本文です。</P>\n<PRE>コードです</PRE>\n<P>　おしまい。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
+    $text     = "
+${square}${square}二段落
+
+　よろしく。
+
+${square}${square}${square}三段落-1
+
+　うーん。
+
+${square}${square}${square}三段落-2
+
+　どうしよう。
+";
+    $expected = "<H2>二段落</H2>
+<P>　よろしく。</P>
+<H3>三段落-1</H3>
+<P>　うーん。</P>
+<H3>三段落-2</H3>
+<P>　どうしよう。</P>
+";
     is $inao->from_inao($text)->to_html, $expected;
 
     done_testing;
