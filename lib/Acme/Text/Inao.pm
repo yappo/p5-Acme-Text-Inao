@@ -84,23 +84,23 @@ my $inao_syntax = q(
     tag_body_chars_base : /[^\x{25c6}\n\/]+/               { $return = { data => [ @item ] } }
 
 
-    tag_start_B    : RHOMBUS 'b' SLASH RHOMBUS
-    tag_end_B      : RHOMBUS SLASH  'b' RHOMBUS
+    tag_start_B       :    RHOMBUS 'b'    SLASH  RHOMBUS
+    tag_end_B         :    RHOMBUS SLASH  'b'    RHOMBUS
 
-    tag_start_I    : RHOMBUS 'i' SLASH RHOMBUS
-    tag_end_I      : RHOMBUS SLASH  'i' RHOMBUS
+    tag_start_I       :    RHOMBUS 'i'    SLASH  RHOMBUS
+    tag_end_I         :    RHOMBUS SLASH  'i'    RHOMBUS
 
-    tag_start_CMD  : RHOMBUS 'cmd' SLASH RHOMBUS
-    tag_end_CMD    : RHOMBUS SLASH  'cmd' RHOMBUS
+    tag_start_CMD     :    RHOMBUS 'cmd'  SLASH  RHOMBUS
+    tag_end_CMD       :    RHOMBUS SLASH  'cmd'  RHOMBUS
 
-    tag_start_caption    : RHOMBUS '注' SLASH RHOMBUS
-    tag_end_caption      : RHOMBUS SLASH  '注' RHOMBUS
+    tag_start_caption :    RHOMBUS '注'   SLASH  RHOMBUS
+    tag_end_caption   :    RHOMBUS SLASH  '注'   RHOMBUS
 
-    tag_start_RUBY : RHOMBUS 'ルビ' SLASH RHOMBUS
-    tag_end_RUBY   : RHOMBUS SLASH  'ルビ' RHOMBUS
+    tag_start_RUBY    :    RHOMBUS 'ルビ' SLASH  RHOMBUS
+    tag_end_RUBY      :    RHOMBUS SLASH  'ルビ' RHOMBUS
 
-    tag_start_list : LF RHOMBUS 'list' SLASH RHOMBUS LF
-    tag_end_list   : LF RHOMBUS SLASH  'list' RHOMBUS LF
+    tag_start_list    : LF RHOMBUS 'list' SLASH  RHOMBUS LF
+    tag_end_list      : LF RHOMBUS SLASH  'list' RHOMBUS LF
 
     SPACE      : /\x{3000}/
     TEN        : /\x{3001}/
