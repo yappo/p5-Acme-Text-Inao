@@ -4,8 +4,6 @@ use utf8;
 use Test::More;
 use Acme::Text::Inao;
 
-use Data::Dumper;warn Dumper("◆");
-
 my $square  = "\x{25a0}";
 my $rhombus = "\x{25c6}";
 
@@ -15,14 +13,14 @@ sub run_tests {
 
 my $inao = Acme::Text::Inao->new( parser_start => 'paragraph' );
 
-subtest 'パラグラフ1個' => sub {
+subtest 'paragraph 1' => sub {
     my $text     = "　文章だよ。\n";
     my $expected = "<P>　文章だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
     done_testing;
 };
 
-subtest 'パラグラフ3個' => sub {
+subtest 'paragraph 3' => sub {
     my $text     = "　文章の頭のテスト。ここから改行です。はい。パラグラフは行末が。で終わらないといけませんが、行頭は全角空白で始まる必要があります。
 　その他にも空行は認められません。
 　さんぎょうめだよ。
@@ -36,7 +34,7 @@ subtest 'パラグラフ3個' => sub {
     done_testing;
 };
 
-subtest 'パラグラフ2個 空行混み' => sub {
+subtest 'paragraph 2 with empty line' => sub {
     my $text     = "　文章の頭のテスト。ここから改行です。はい。パラグラフは行末が。で終わらないといけませんが、行頭は全角空白で始まる必要があります。
 
 　さんぎょうめだよ。
@@ -50,7 +48,7 @@ subtest 'パラグラフ2個 空行混み' => sub {
     done_testing;
 };
 
-subtest 'タグ付きパラグラフ' => sub {
+subtest 'paragraph with tags' => sub {
     my $text     = "　文章の${rhombus}b/${rhombus}強調している、文章なんです。${rhombus}/b${rhombus}だよ。\n";
     my $expected = "<P>　文章の<B>強調している、文章なんです。</B>だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
@@ -82,7 +80,7 @@ subtest 'タグ付きパラグラフ' => sub {
     done_testing;
 };
 
-subtest 'キャプション付きパラグラフ' => sub {
+subtest 'paragraph caption' => sub {
     my $text     = "　文章の${rhombus}注/${rhombus}ここは注約なんです${rhombus}/注${rhombus}だよ。\n";
     my $expected = "<P>　文章の(ここは注約なんです)だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
