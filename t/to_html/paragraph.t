@@ -55,9 +55,22 @@ subtest 'タグ付きパラグラフ' => sub {
     my $expected = "<P>　文章の<B>強調している、文章なんです。</B>だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
 
-    my $text     = "　文章の${rhombus}b/${rhombus}強調${rhombus}/b${rhombus}だよ。\n";
-    my $expected = "<P>　文章の<B>強調</B>だよ。</P>\n";
+    $text     = "　文章の${rhombus}b/${rhombus}強調${rhombus}/b${rhombus}だよ。\n";
+    $expected = "<P>　文章の<B>強調</B>だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
+
+    $text     = "　文章の${rhombus}i/${rhombus}イタリック${rhombus}/i${rhombus}だよ。\n";
+    $expected = "<P>　文章の<I>イタリック</I>だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
+    $text     = "　文章の${rhombus}cmd/${rhombus}print \"hello!\\n\"${rhombus}/cmd${rhombus}だよ。\n";
+    $expected = "<P>　文章の<CMD>print \"hello!\\n\"</CMD>だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
+    $text     = "　文章の${rhombus}ルビ/${rhombus}単語${rhombus}たんご${rhombus}/ルビ${rhombus}だよ。\n";
+    $expected = "<P>　文章の単語(たんご)だよ。</P>\n";
+#    is $inao->from_inao($text)->to_html, $expected;
+
     done_testing;
 };
 

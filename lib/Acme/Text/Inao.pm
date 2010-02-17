@@ -40,16 +40,20 @@ my $inao_syntax = q(
     chars      : /[^\x{3000}-\x{3002}\x{25c6}]+/               { $return = { data => [ @item ] } }
 
     tag_body: tag_start_B tag_body_phrase(s) tag_end_B     { $return = { data => [ $item[0], 'B', $item[2] ] } }
+            | tag_start_I tag_body_phrase(s) tag_end_I     { $return = { data => [ $item[0], 'I', $item[2] ] } }
+            | tag_start_CMD tag_body_phrase(s) tag_end_CMD     { $return = { data => [ $item[0], 'CMD', $item[2] ] } }
+
     tag_body_phrase: semi_phrase(s) { $return = { data => [ @item ] } }
                    | chars(s)       { $return = { data => [ @item ] } }
 
-    tag_start: tag_start_B | tag_start_I { warn "TAG" }
-    tag_end: tag_end_B
     tag_start_B    : RHOMBUS 'b' SLASH RHOMBUS
     tag_end_B      : RHOMBUS SLASH  'b' RHOMBUS
 
     tag_start_I    : RHOMBUS 'i' SLASH RHOMBUS
     tag_end_I      : RHOMBUS SLASH  'i' RHOMBUS
+
+    tag_start_CMD  : RHOMBUS 'cmd' SLASH RHOMBUS
+    tag_end_CMD    : RHOMBUS SLASH  'cmd' RHOMBUS
 
     SPACE      : /\x{3000}/
     TEN        : /\x{3001}/
