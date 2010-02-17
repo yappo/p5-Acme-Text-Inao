@@ -6,34 +6,26 @@ use Acme::Text::Inao;
 
 my $square = "\x{25a0}";
 
-sub run_tests {
-    my($text, $expected) = @_;
-}
 
-my $text     = "
-${square}foo
-text1
-${square}${square}bar
-text2
-${square}${square}${square}baz
-text3
-${square}${square}${square}${square}column
-column
-${square}foo2
-text12
-";
-my $expected = "
-<H1>foo</H1>
-<P>text1</P>
-<H2>bar</H2>
-<P>text2</P>
-<H3>baz</H3>
-<P>text3</P>
-<H4>column</H4>
-<P>column</P>
-";
-my $inao = Acme::Text::Inao->new->parse($text);
-#is $inao->to_html, $expected, $expected;
+my $inao = Acme::Text::Inao->new( parser_start => 'head1' );
+my $text     = "\n${square}タ${square}イトル${square}\n";
+my $expected = "<H1>タ${square}イトル${square}</H1>\n";
+is $inao->from_inao($text)->to_html, $expected;
+
+$inao = Acme::Text::Inao->new( parser_start => 'head2' );
+$text     = "\n${square}${square}タ${square}イトル${square}\n";
+$expected = "<H2>タ${square}イトル${square}</H2>\n";
+is $inao->from_inao($text)->to_html, $expected;
+
+$inao = Acme::Text::Inao->new( parser_start => 'head3' );
+$text     = "\n${square}${square}${square}タ${square}イトル${square}\n";
+$expected = "<H3>タ${square}イトル${square}</H3>\n";
+is $inao->from_inao($text)->to_html, $expected;
+
+$inao = Acme::Text::Inao->new( parser_start => 'column_head' );
+$text     = "\n${square}${square}${square}${square}コラム${square}タイトル\n";
+$expected = "<H1>コラム${square}タイトル</H1>\n";
+is $inao->from_inao($text)->to_html, $expected;
 
 done_testing;
 

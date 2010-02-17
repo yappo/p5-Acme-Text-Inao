@@ -29,13 +29,18 @@ my $_inao_syntax = q(
 
 my $inao_syntax = q(
 
+    head1: LF SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[4] ] } }
+    head2: LF SQUARE SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[5] ] } }
+    head3: LF SQUARE SQUARE SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[6] ] } }
+    column_head: LF SQUARE SQUARE SQUARE SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[7] ] } }
+
     list: tag_start_list list_body(s) all_chars_without_lf tag_end_list { $return = { data => [ $item[0], $item[2], $item[3] ] } }
     list_body: all_chars_without_lf ...!tag_end_list LF {  $return = { data => [ $item[0], "$item[1]$item[3]" ] } }
 
     ul: li(s) LF { $return = { data => [ @item ] } }
     li: LF LI_DOT all_chars_without_lf ...LF { $return = { data => [ $item[0], $item[3] ] } }
 
-    paragraph  : line(s)                               { $return = { data => [ @item ] } }
+    paragraph  : line(s)                            { $return = { data => [ $item[0], $item[2] ] } }
     line       : brank
                | SPACE phrase(s?) LF                   { $return = { data => [ $item[0], $item[1], $item[2] ] } }
     brank      : LF                                    { $return = { data => [ @item ] } }
@@ -160,6 +165,23 @@ sub _to_html_brank {
 sub _to_html_line {
     my($self, $prefix, $items) = @_;
     join '', '<P>', $prefix, $self->stack_walker($items), '</P>', "\n";
+}
+
+sub _to_html_head1 {
+    my($self, $text) = @_;
+    join '', '<H1>', $text, '</H1>', "\n";
+}
+sub _to_html_head2 {
+    my($self, $text) = @_;
+    join '', '<H2>', $text, '</H2>', "\n";
+}
+sub _to_html_head3 {
+    my($self, $text) = @_;
+    join '', '<H3>', $text, '</H3>', "\n";
+}
+sub _to_html_column_head {
+    my($self, $text) = @_;
+    join '', '<H1>', $text, '</H1>', "\n";
 }
 
 sub _to_html_list {
