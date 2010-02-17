@@ -5,6 +5,8 @@ our $VERSION = '0.01';
 
 use Parse::RecDescent;
 
+use Acme::Text::Inao::HTML;
+
 use utf8;
 $::RD_HINT = 1;
 #$::RD_TRACE = 1;
@@ -130,126 +132,7 @@ sub from_inao {
 
 sub to_html {
     my $self = shift;
-    my $html;
-    return $self->_to_html_dispatcher($self->{parsed}->{data});
-}
-
-sub stack_walker {
-    my($self, $items) = @_;
-    my @results;
-    for my $data (@{ $items }) {
-        push @results, $self->_to_html_dispatcher($data->{data});
-    }
-    @results;
-}
-
-sub _stack_walker_with_merge {
-    join '', $_[0]->stack_walker($_[1]);
-}
-
-sub _to_html_dispatcher {
-    my($self, $item) = @_;
-    $item = [ $item ] unless ref($item) eq 'ARRAY';
-    my @items = @{ $item };
-    my $name = shift @items;
-    $name = "_to_html_$name";
-    $self->$name(@items);
-}
-
-sub _to_html_paragraph { shift->_stack_walker_with_merge(@_) }
-
-sub _to_html_line {
-    my($self, $prefix, $items) = @_;
-    join '', '<P>', $prefix, $self->stack_walker($items), '</P>', "\n";
-}
-
-sub _to_html_body { shift->_stack_walker_with_merge(@_) }
-sub _to_html_sections { shift->_stack_walker_with_merge(@_) }
-
-sub _to_html_section1 {
-    my($self, $head, $items) = @_;
-    join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
-}
-sub _to_html_content1 { shift->_stack_walker_with_merge(@_) }
-sub _to_html_section2 { shift->_to_html_section1(@_) }
-sub _to_html_content2 { shift->_to_html_content1(@_) }
-sub _to_html_section3 { shift->_to_html_section1(@_) }
-sub _to_html_content3 { shift->_to_html_content1(@_) }
-sub _to_html_column_section { shift->_to_html_section1(@_) }
-sub _to_html_column_content { shift->_to_html_content1(@_) }
-
-sub _head_base {
-    my($self, $name, $text) = @_;
-    join '', '<', $name, '>', $text, '</', $name, '>', "\n";
-}
-sub _to_html_head1 { shift->_head_base('H1', @_) }
-sub _to_html_head2 { shift->_head_base('H2', @_) }
-sub _to_html_head3 { shift->_head_base('H3', @_) }
-sub _to_html_column_head { shift->_head_base('H1', @_) }
-
-sub _to_html_list {
-    my($self, $items, $text) = @_;
-    join '', '<PRE>', $self->stack_walker($items), $text, '</PRE>', "\n";
-}
-sub _to_html_list_body { shift->_to_html_chars(@_) }
-
-sub _to_html_ul {
-    my($self, $items) = @_;
-    join '', '<UL>', $self->stack_walker($items), '</UL>', "\n";
-}
-
-sub _to_html_li {
-    my($self, $text) = @_;
-    join '', '<LI>', $text, '</LI>';
-}
-
-sub _to_html_phrase { shift->_stack_walker_with_merge(@_) }
-
-sub _to_html_semi_phrase {
-    my($self, $items, $suffix) = @_;
-    join '', $self->stack_walker($items), $suffix;
-}
-
-sub _to_html_tag_phrase {
-    my($self, $prefix, $items) = @_;
-    my @htmls;
-    push @htmls, $self->stack_walker($prefix);
-    push @htmls, $self->_to_html_dispatcher($items->{data});
-    join '', @htmls;
-}
-
-sub _to_html_tags {
-    my($self, $items) = @_;
-    join '', $self->_to_html_dispatcher($items->{data});
-}
-
-sub _to_html_tag_body {
-    my($self, $tag, $items) = @_;
-    join '', "<$tag>", $self->stack_walker($items), "</$tag>";
-}
-
-sub _to_html_tag_ruby {
-    my($self, $word, $ruby) = @_;
-    join '', $self->stack_walker($word), '(', $self->stack_walker($ruby), ')';
-}
-
-sub _to_html_tag_caption {
-    my($self, $items) = @_;
-    join '', '(', $self->stack_walker($items), ')';
-}
-
-sub _to_html_tag_body_chars {
-    my($self, $rhombus, $items) = @_;
-    join '', $rhombus, $self->stack_walker($items);
-}
-
-sub _to_html_tag_body_chars_base { shift->_to_html_chars(@_) }
-
-sub _to_html_tag_body_phrase { shift->_stack_walker_with_merge(@_) }
-
-sub _to_html_chars {
-    my($self, $text) = @_;
-    $text;
+    Acme::Text::Inao::HTML->new->walk($self->{parsed}->{data});
 }
 
 1;
