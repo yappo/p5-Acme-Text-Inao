@@ -69,7 +69,7 @@ subtest 'タグ付きパラグラフ' => sub {
 
     $text     = "　文章の${rhombus}ルビ/${rhombus}単語${rhombus}たんご${rhombus}/ルビ${rhombus}だよ。\n";
     $expected = "<P>　文章の単語(たんご)だよ。</P>\n";
-#    is $inao->from_inao($text)->to_html, $expected;
+    is $inao->from_inao($text)->to_html, $expected;
 
     done_testing;
 };

@@ -35,6 +35,7 @@ my $inao_syntax = q(
     phrase     : tag_phrase(s)                         { $return = { data => [ @item ] } }
                | semi_phrase(s)                        { $return = { data => [ @item ] } }
     tag_phrase : chars(s) tag_body      { $return = { data => [ @item ] } }
+               | chars(s) tag_ruby      { $return = { data => [ @item ] } }
     semi_phrase: chars(s) MARU                            { $return = { data => [ @item ] } }
                | chars(s) TEN                             { $return = { data => [ @item ] } }
     chars      : /[^\x{3000}-\x{3002}\x{25c6}]+/               { $return = { data => [ @item ] } }
@@ -42,6 +43,7 @@ my $inao_syntax = q(
     tag_body: tag_start_B tag_body_phrase(s) tag_end_B     { $return = { data => [ $item[0], 'B', $item[2] ] } }
             | tag_start_I tag_body_phrase(s) tag_end_I     { $return = { data => [ $item[0], 'I', $item[2] ] } }
             | tag_start_CMD tag_body_phrase(s) tag_end_CMD     { $return = { data => [ $item[0], 'CMD', $item[2] ] } }
+    tag_ruby : tag_start_RUBY chars(s) RHOMBUS chars(s) tag_end_RUBY    { $return = { data => [ $item[0], $item[2], $item[4] ] } }
 
     tag_body_phrase: semi_phrase(s) { $return = { data => [ @item ] } }
                    | chars(s)       { $return = { data => [ @item ] } }
@@ -54,6 +56,9 @@ my $inao_syntax = q(
 
     tag_start_CMD  : RHOMBUS 'cmd' SLASH RHOMBUS
     tag_end_CMD    : RHOMBUS SLASH  'cmd' RHOMBUS
+
+    tag_start_RUBY : RHOMBUS 'ルビ' SLASH RHOMBUS
+    tag_end_RUBY   : RHOMBUS SLASH  'ルビ' RHOMBUS
 
     SPACE      : /\x{3000}/
     TEN        : /\x{3001}/
@@ -161,6 +166,20 @@ sub _to_html_tag_body {
         push @htmls, $self->_to_html_dispatcher($data->{data});
     }
     join '', "<$tag>", @htmls, "</$tag>";
+}
+
+sub _to_html_tag_ruby {
+    my($self, $word, $ruby) = @_;
+    my @htmls;
+    for my $data (@{ $word }) {
+        push @htmls, $self->_to_html_dispatcher($data->{data});
+    }
+    push @htmls, '(';
+    for my $data (@{ $ruby }) {
+        push @htmls, $self->_to_html_dispatcher($data->{data});
+    }
+    push @htmls, ')';
+    join '', @htmls;
 }
 
 sub _to_html_tag_body_phrase {
