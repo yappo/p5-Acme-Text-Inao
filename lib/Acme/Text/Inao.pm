@@ -1,6 +1,7 @@
 package Acme::Text::Inao;
 use strict;
 use warnings;
+use utf8;
 our $VERSION = '0.01';
 
 use Parse::RecDescent;
@@ -8,7 +9,6 @@ use Parse::RecDescent;
 use Acme::Text::Inao::HTML;
 use Acme::Text::Inao::Status;
 
-use utf8;
 $::RD_HINT = 1;
 #$::RD_TRACE = 1;
 #$::RD_WARN = sub { warn Dumper(\@_) };
