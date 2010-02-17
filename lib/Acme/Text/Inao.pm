@@ -29,6 +29,10 @@ my $_inao_syntax = q(
 
 my $inao_syntax = q(
 
+    body: sections(s)           { $return = { data => [ @item ] } }
+    sections: section1(s)       { $return = { data => [ @item ] } }
+            | column_section(s) { $return = { data => [ @item ] } }
+
     section1: head1 content1(s) { $return = { data => [ @item ] } }
     content1: section2(s)  { $return = { data => [ @item ] } }
             | paragraph(s) { $return = { data => [ @item ] } }
@@ -185,6 +189,15 @@ sub _to_html_brank {
 sub _to_html_line {
     my($self, $prefix, $items) = @_;
     join '', '<P>', $prefix, $self->stack_walker($items), '</P>', "\n";
+}
+
+sub _to_html_body {
+    my($self, $items) = @_;
+    join '', $self->stack_walker($items);
+}
+sub _to_html_sections {
+    my($self, $items) = @_;
+    join '', $self->stack_walker($items);
 }
 
 sub _to_html_section1 {
