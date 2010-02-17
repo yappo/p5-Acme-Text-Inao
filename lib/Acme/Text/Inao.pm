@@ -39,7 +39,9 @@ my $inao_syntax = q(
                | chars(s) TEN                             { $return = { data => [ @item ] } }
     chars      : /[^\x{3000}-\x{3002}\x{25c6}]+/               { $return = { data => [ @item ] } }
 
-    tag_body: tag_start_B semi_phrase(s) tag_end_B     { $return = { data => [ $item[0], 'B', $item[2] ] } }
+    tag_body: tag_start_B tag_body_phrase(s) tag_end_B     { $return = { data => [ $item[0], 'B', $item[2] ] } }
+    tag_body_phrase: semi_phrase(s) { $return = { data => [ @item ] } }
+                   | chars(s)       { $return = { data => [ @item ] } }
 
     tag_start: tag_start_B | tag_start_I { warn "TAG" }
     tag_end: tag_end_B
@@ -155,6 +157,15 @@ sub _to_html_tag_body {
         push @htmls, $self->_to_html_dispatcher($data->{data});
     }
     join '', "<$tag>", @htmls, "</$tag>";
+}
+
+sub _to_html_tag_body_phrase {
+    my($self, $items) = @_;
+    my @htmls;
+    for my $data (@{ $items }) {
+        push @htmls, $self->_to_html_dispatcher($data->{data});
+    }
+    join '', @htmls;
 }
 
 sub _to_html_chars {
