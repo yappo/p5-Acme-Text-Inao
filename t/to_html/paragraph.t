@@ -34,20 +34,6 @@ subtest 'paragraph 3' => sub {
     done_testing;
 };
 
-subtest 'paragraph 2 with empty line' => sub {
-    my $text     = "\n　文章の頭のテスト。ここから改行です。はい。パラグラフは行末が。で終わらないといけませんが、行頭は全角空白で始まる必要があります。
-
-　さんぎょうめだよ。
-";
-
-    my $expected = "<P>　文章の頭のテスト。ここから改行です。はい。パラグラフは行末が。で終わらないといけませんが、行頭は全角空白で始まる必要があります。</P>
-<BR />
-<P>　さんぎょうめだよ。</P>
-";
-    is $inao->from_inao($text)->to_html, $expected;
-    done_testing;
-};
-
 subtest 'paragraph with tags' => sub {
     my $text     = "\n　文章の${rhombus}b/${rhombus}強調している、文章なんです。${rhombus}/b${rhombus}だよ。\n";
     my $expected = "<P>　文章の<B>強調している、文章なんです。</B>だよ。</P>\n";

@@ -29,6 +29,27 @@ my $_inao_syntax = q(
 
 my $inao_syntax = q(
 
+    section1: head1 content1(s) { $return = { data => [ @item ] } }
+    content1:
+              paragraph(s) { $return = { data => [ @item ] } }
+            | list(s)      { $return = { data => [ @item ] } }
+            | ul(s)        { $return = { data => [ @item ] } }
+    section2: head2 content2(s) { $return = { data => [ @item ] } }
+    content2:
+              paragraph(s) { $return = { data => [ @item ] } }
+            | list(s)      { $return = { data => [ @item ] } }
+            | ul(s)        { $return = { data => [ @item ] } }
+    section3: head3 content3(s) { $return = { data => [ @item ] } }
+    content3:
+              paragraph(s) { $return = { data => [ @item ] } }
+            | list(s)      { $return = { data => [ @item ] } }
+            | ul(s)        { $return = { data => [ @item ] } }
+    column_section: column_head column_content(s) { $return = { data => [ @item ] } }
+    column_content:
+              paragraph(s) { $return = { data => [ @item ] } }
+            | list(s)      { $return = { data => [ @item ] } }
+            | ul(s)        { $return = { data => [ @item ] } }
+
     head1: LF SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[4] ] } }
     head2: LF SQUARE SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[5] ] } }
     head3: LF SQUARE SQUARE SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[6] ] } }
@@ -41,8 +62,7 @@ my $inao_syntax = q(
     li: LF LI_DOT all_chars_without_lf ...LF { $return = { data => [ $item[0], $item[3] ] } }
 
     paragraph  : LF line(s)                            { $return = { data => [ $item[0], $item[2] ] } }
-    line       : brank
-               | SPACE phrase(s?) LF                   { $return = { data => [ $item[0], $item[1], $item[2] ] } }
+    line       : SPACE phrase(s?) LF                   { $return = { data => [ $item[0], $item[1], $item[2] ] } }
     brank      : LF                                    { $return = { data => [ @item ] } }
     phrase     : tag_phrase(s)                         { $return = { data => [ @item ] } }
                | semi_phrase(s)                        { $return = { data => [ @item ] } }
@@ -165,6 +185,39 @@ sub _to_html_brank {
 sub _to_html_line {
     my($self, $prefix, $items) = @_;
     join '', '<P>', $prefix, $self->stack_walker($items), '</P>', "\n";
+}
+
+sub _to_html_section1 {
+    my($self, $head, $items) = @_;
+    join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
+}
+sub _to_html_content1 {
+    my($self, $items) = @_;
+    join '', $self->stack_walker($items);
+}
+sub _to_html_section2 {
+    my($self, $head, $items) = @_;
+    join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
+}
+sub _to_html_content2 {
+    my($self, $items) = @_;
+    join '', $self->stack_walker($items);
+}
+sub _to_html_section3 {
+    my($self, $head, $items) = @_;
+    join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
+}
+sub _to_html_content3 {
+    my($self, $items) = @_;
+    join '', $self->stack_walker($items);
+}
+sub _to_html_column_section {
+    my($self, $head, $items) = @_;
+    join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
+}
+sub _to_html_column_content {
+    my($self, $items) = @_;
+    join '', $self->stack_walker($items);
 }
 
 sub _to_html_head1 {
