@@ -29,8 +29,8 @@ my $_inao_syntax = q(
 
 my $inao_syntax = q(
 
-    list: tag_start_list list_body(s) /[^\n]+/ tag_end_list { $return = { data => [ $item[0], $item[2], $item[3] ] } }
-    list_body: /[^\n]+/ ...!tag_end_list LF {  $return = { data => [ $item[0], "$item[1]$item[3]" ] } }
+    list: tag_start_list list_body(s) all_chars_without_lf tag_end_list { $return = { data => [ $item[0], $item[2], $item[3] ] } }
+    list_body: all_chars_without_lf ...!tag_end_list LF {  $return = { data => [ $item[0], "$item[1]$item[3]" ] } }
 
     paragraph  : line(s)                               { $return = { data => [ @item ] } }
     line       : brank
