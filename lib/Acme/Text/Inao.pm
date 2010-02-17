@@ -34,12 +34,18 @@ my $inao_syntax = q(
     brank      : LF                                    { $return = { data => [ @item ] } }
     phrase     : tag_phrase(s)                         { $return = { data => [ @item ] } }
                | semi_phrase(s)                        { $return = { data => [ @item ] } }
+               | tags(s)                        { $return = { data => [ @item ] } }
+
     tag_phrase : chars(s) tag_body      { $return = { data => [ @item ] } }
                | chars(s) tag_caption   { $return = { data => [ @item ] } }
                | chars(s) tag_ruby      { $return = { data => [ @item ] } }
     semi_phrase: chars(s) MARU                            { $return = { data => [ @item ] } }
                | chars(s) TEN                             { $return = { data => [ @item ] } }
     chars      : /[^\x{3000}-\x{3002}\x{25c6}]+/               { $return = { data => [ @item ] } }
+
+    tags    : tag_body      { $return = { data => [ @item ] } }
+            | tag_caption      { $return = { data => [ @item ] } }
+            | tag_ruby      { $return = { data => [ @item ] } }
 
     tag_body: tag_start_B tag_body_phrase(s) tag_end_B     { $return = { data => [ $item[0], 'B', $item[2] ] } }
             | tag_start_I tag_body_phrase(s) tag_end_I     { $return = { data => [ $item[0], 'I', $item[2] ] } }
@@ -162,6 +168,11 @@ sub _to_html_tag_phrase {
     push @htmls, $self->stack_walker($prefix);
     push @htmls, $self->_to_html_dispatcher($items->{data});
     join '', @htmls;
+}
+
+sub _to_html_tags {
+    my($self, $items) = @_;
+    join '', $self->_to_html_dispatcher($items->{data});
 }
 
 sub _to_html_tag_body {

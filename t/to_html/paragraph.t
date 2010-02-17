@@ -75,7 +75,17 @@ subtest 'paragraph with tags' => sub {
 
     $text     = "　文章の${rhombus}ルビ/${rhombus}単語${rhombus}たんご${rhombus}/ルビ${rhombus}だよ。\n";
     $expected = "<P>　文章の単語(たんご)だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected, 'ruby';
+
+    $text     = "　文章の${rhombus}b/${rhombus}強調${rhombus}/b${rhombus}と${rhombus}i/${rhombus}イタリック${rhombus}/i${rhombus}と${rhombus}cmd/${rhombus}print \"hello!\\n\"${rhombus}/cmd${rhombus}と${rhombus}ルビ/${rhombus}単語${rhombus}たんご${rhombus}/ルビ${rhombus}だよ。\n";
+    $expected = "<P>　文章の<B>強調</B>と<I>イタリック</I>と<CMD>print \"hello!\\n\"</CMD>と単語(たんご)だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
+
+
+    $text     = "　文章の${rhombus}b/${rhombus}強調${rhombus}/b${rhombus}${rhombus}i/${rhombus}イタリック${rhombus}/i${rhombus}${rhombus}cmd/${rhombus}print \"hello!\\n\"${rhombus}/cmd${rhombus}${rhombus}ルビ/${rhombus}単語${rhombus}たんご${rhombus}/ルビ${rhombus}だよ。\n";
+    $expected = "<P>　文章の<B>強調</B><I>イタリック</I><CMD>print \"hello!\\n\"</CMD>単語(たんご)だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
 
     done_testing;
 };
@@ -87,6 +97,15 @@ subtest 'paragraph caption' => sub {
 
     $text     = "　文章の${rhombus}注/${rhombus}注約に${rhombus}をまぜます。${rhombus}/注${rhombus}だよ。\n";
     $expected = "<P>　文章の(注約に${rhombus}をまぜます。)だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
+    done_testing;
+};
+
+subtest 'paragraph caption tags' => sub {
+
+    my $text     = "　文章の${rhombus}注/${rhombus}注約をいれて${rhombus}/注${rhombus}${rhombus}b/${rhombus}強調${rhombus}/b${rhombus}しながら${rhombus}i/${rhombus}イタリック${rhombus}/i${rhombus}にするという${rhombus}ルビ/${rhombus}技${rhombus}わざ${rhombus}/ルビ${rhombus}です。\n";
+    my $expected = "<P>　文章の(注約をいれて)<B>強調</B>しながら<I>イタリック</I>にするという技(わざ)です。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
 
     done_testing;
