@@ -5,9 +5,9 @@ readme_from 'lib/Acme/Text/Inao.pm';
 readme_pod_from 'lib/Acme/Text/Inao.pm';
 githubmeta;
 
-# requires '';
+requires 'Parse::RecDescent';
 
-tests 't/*.t';
+tests 't/*.t t/*/*.t';
 author_tests 'xt';
 
 build_requires 'Test::More';
