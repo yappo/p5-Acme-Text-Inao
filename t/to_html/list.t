@@ -18,6 +18,10 @@ subtest 'list' => sub {
     my $expected = "<PRE>sub foo{\n   die;\n}</PRE>\n";
     is $inao->from_inao($text)->to_html, $expected;
 
+    $text     = "\n${rhombus}list/${rhombus}\n# 一行だけ\n${rhombus}/list${rhombus}\n";
+    $expected = "<PRE># 一行だけ</PRE>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
     $text     = "\n${rhombus}list/${rhombus}\n${rhombus}b/${rhombus}タグ記号を含めるよ${rhombus}/b${rhombus}\n${rhombus}/list${rhombus}\n";
     $expected = "<PRE>${rhombus}b/${rhombus}タグ記号を含めるよ${rhombus}/b${rhombus}</PRE>\n";
 

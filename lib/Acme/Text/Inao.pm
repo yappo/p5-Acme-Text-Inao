@@ -34,7 +34,7 @@ my $inao_syntax = q(
     head3: LF SQUARE SQUARE SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[6] ] } }
     column_head: LF SQUARE SQUARE SQUARE SQUARE ...!SQUARE all_chars_without_lf LF { $return = { data => [ $item[0], $item[7] ] } }
 
-    list: tag_start_list list_body(s) all_chars_without_lf tag_end_list { $return = { data => [ $item[0], $item[2], $item[3] ] } }
+    list: tag_start_list list_body(s?) all_chars_without_lf tag_end_list { $return = { data => [ $item[0], $item[2], $item[3] ] } }
     list_body: all_chars_without_lf ...!tag_end_list LF {  $return = { data => [ $item[0], "$item[1]$item[3]" ] } }
 
     ul: li(s) LF { $return = { data => [ @item ] } }
