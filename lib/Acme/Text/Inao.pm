@@ -93,6 +93,15 @@ sub to_html {
     return $self->_to_html_dispatcher($self->{parsed}->{data});
 }
 
+sub stack_walker {
+    my($self, $items) = @_;
+    my @results;
+    for my $data (@{ $items }) {
+        push @results, $self->_to_html_dispatcher($data->{data});
+    }
+    @results;
+}
+
 sub _to_html_dispatcher {
     my($self, $item) = @_;
     $item = [ $item ] unless ref($item) eq 'ARRAY';
@@ -124,71 +133,40 @@ sub _to_html_brank {
 
 sub _to_html_line {
     my($self, $prefix, $items) = @_;
-    my @htmls;
-    for my $data (@{ $items }) {
-        push @htmls, $self->_to_html_dispatcher($data->{data});
-    }
-    join '', '<P>', $prefix, @htmls, '</P>', "\n";
+    join '', '<P>', $prefix, $self->stack_walker($items), '</P>', "\n";
 }
 
 sub _to_html_phrase {
     my($self, $items) = @_;
-    my @htmls;
-    for my $data (@{ $items }) {
-        push @htmls, $self->_to_html_dispatcher($data->{data});
-    }
-    join '', @htmls;
+    join '', $self->stack_walker($items);
 }
 
 sub _to_html_semi_phrase {
     my($self, $items, $suffix) = @_;
-    my @htmls;
-    for my $data (@{ $items }) {
-        push @htmls, $self->_to_html_dispatcher($data->{data});
-    }
-    join '', @htmls, $suffix;
+    join '', $self->stack_walker($items), $suffix;
 }
 
 sub _to_html_tag_phrase {
     my($self, $prefix, $items) = @_;
     my @htmls;
-    for my $data (@{ $prefix }) {
-        push @htmls, $self->_to_html_dispatcher($data->{data});
-    }
+    push @htmls, $self->stack_walker($prefix);
     push @htmls, $self->_to_html_dispatcher($items->{data});
     join '', @htmls;
 }
 
 sub _to_html_tag_body {
     my($self, $tag, $items) = @_;
-    my @htmls;
-    for my $data (@{ $items }) {
-        push @htmls, $self->_to_html_dispatcher($data->{data});
-    }
-    join '', "<$tag>", @htmls, "</$tag>";
+    join '', "<$tag>", $self->stack_walker($items), "</$tag>";
 }
 
 sub _to_html_tag_ruby {
     my($self, $word, $ruby) = @_;
-    my @htmls;
-    for my $data (@{ $word }) {
-        push @htmls, $self->_to_html_dispatcher($data->{data});
-    }
-    push @htmls, '(';
-    for my $data (@{ $ruby }) {
-        push @htmls, $self->_to_html_dispatcher($data->{data});
-    }
-    push @htmls, ')';
-    join '', @htmls;
+    join '', $self->stack_walker($word), '(', $self->stack_walker($ruby), ')';
 }
 
 sub _to_html_tag_body_phrase {
     my($self, $items) = @_;
-    my @htmls;
-    for my $data (@{ $items }) {
-        push @htmls, $self->_to_html_dispatcher($data->{data});
-    }
-    join '', @htmls;
+    join '', $self->stack_walker($items);
 }
 
 sub _to_html_chars {
