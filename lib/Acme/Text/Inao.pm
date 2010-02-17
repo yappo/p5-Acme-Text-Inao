@@ -36,9 +36,7 @@ my $inao_syntax = q(
                | semi_phrase(s)                        { $return = { data => [ @item ] } }
                | tags(s)                        { $return = { data => [ @item ] } }
 
-    tag_phrase : chars(s) tag_body      { $return = { data => [ @item ] } }
-               | chars(s) tag_caption   { $return = { data => [ @item ] } }
-               | chars(s) tag_ruby      { $return = { data => [ @item ] } }
+    tag_phrase : chars(s) tags      { $return = { data => [ @item ] } }
     semi_phrase: chars(s) MARU                            { $return = { data => [ @item ] } }
                | chars(s) TEN                             { $return = { data => [ @item ] } }
     chars      : /[^\x{3000}-\x{3002}\x{25c6}]+/               { $return = { data => [ @item ] } }
