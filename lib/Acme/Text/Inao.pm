@@ -143,6 +143,10 @@ sub stack_walker {
     @results;
 }
 
+sub _stack_walker_with_merge {
+    join '', $_[0]->stack_walker($_[1]);
+}
+
 sub _to_html_dispatcher {
     my($self, $item) = @_;
     $item = [ $item ] unless ref($item) eq 'ARRAY';
@@ -152,57 +156,36 @@ sub _to_html_dispatcher {
     $self->$name(@items);
 }
 
-sub _to_html_paragraph {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
+sub _to_html_paragraph { shift->_stack_walker_with_merge(@_) }
 
 sub _to_html_line {
     my($self, $prefix, $items) = @_;
     join '', '<P>', $prefix, $self->stack_walker($items), '</P>', "\n";
 }
 
-sub _to_html_body {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
-sub _to_html_sections {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
+sub _to_html_body { shift->_stack_walker_with_merge(@_) }
+sub _to_html_sections { shift->_stack_walker_with_merge(@_) }
 
 sub _to_html_section1 {
     my($self, $head, $items) = @_;
     join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
 }
-sub _to_html_content1 {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
+sub _to_html_content1 { shift->_stack_walker_with_merge(@_) }
 sub _to_html_section2 {
     my($self, $head, $items) = @_;
     join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
 }
-sub _to_html_content2 {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
+sub _to_html_content2 { shift->_stack_walker_with_merge(@_) }
 sub _to_html_section3 {
     my($self, $head, $items) = @_;
     join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
 }
-sub _to_html_content3 {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
+sub _to_html_content3 { shift->_stack_walker_with_merge(@_) }
 sub _to_html_column_section {
     my($self, $head, $items) = @_;
     join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
 }
-sub _to_html_column_content {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
+sub _to_html_column_content { shift->_stack_walker_with_merge(@_) }
 
 sub _to_html_head1 {
     my($self, $text) = @_;
@@ -240,10 +223,7 @@ sub _to_html_li {
     join '', '<LI>', $text, '</LI>';
 }
 
-sub _to_html_phrase {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
+sub _to_html_phrase { shift->_stack_walker_with_merge(@_) }
 
 sub _to_html_semi_phrase {
     my($self, $items, $suffix) = @_;
@@ -288,10 +268,7 @@ sub _to_html_tag_body_chars_base {
     $text;
 }
 
-sub _to_html_tag_body_phrase {
-    my($self, $items) = @_;
-    join '', $self->stack_walker($items);
-}
+sub _to_html_tag_body_phrase { shift->_stack_walker_with_merge(@_) }
 
 sub _to_html_chars {
     my($self, $text) = @_;
