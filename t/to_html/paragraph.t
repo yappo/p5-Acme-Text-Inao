@@ -59,6 +59,14 @@ subtest 'タグ付きパラグラフ' => sub {
     $expected = "<P>　文章の<B>強調</B>だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
 
+    $text     = "　文章の${rhombus}b/${rhombus}強調に${rhombus}をまぜます${rhombus}/b${rhombus}だよ。\n";
+    $expected = "<P>　文章の<B>強調に${rhombus}をまぜます</B>だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
+    $text     = "　文章の${rhombus}b/${rhombus}${rhombus}をまぜます${rhombus}/b${rhombus}だよ。\n";
+    $expected = "<P>　文章の<B>${rhombus}をまぜます</B>だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
     $text     = "　文章の${rhombus}i/${rhombus}イタリック${rhombus}/i${rhombus}だよ。\n";
     $expected = "<P>　文章の<I>イタリック</I>だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
@@ -77,6 +85,10 @@ subtest 'タグ付きパラグラフ' => sub {
 subtest 'キャプション付きパラグラフ' => sub {
     my $text     = "　文章の${rhombus}注/${rhombus}ここは注約なんです${rhombus}/注${rhombus}だよ。\n";
     my $expected = "<P>　文章の(ここは注約なんです)だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
+    $text     = "　文章の${rhombus}注/${rhombus}注約に${rhombus}をまぜます。${rhombus}/注${rhombus}だよ。\n";
+    $expected = "<P>　文章の(注約に${rhombus}をまぜます。)だよ。</P>\n";
     is $inao->from_inao($text)->to_html, $expected;
 
     done_testing;

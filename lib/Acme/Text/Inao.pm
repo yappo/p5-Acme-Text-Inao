@@ -49,6 +49,11 @@ my $inao_syntax = q(
 
     tag_body_phrase: semi_phrase(s) { $return = { data => [ @item ] } }
                    | chars(s)       { $return = { data => [ @item ] } }
+                   | tag_body_chars(s)       { $return = { data => [ @item ] } }
+
+   tag_body_chars : RHOMBUS tag_body_chars_base(s)      { $return = { data => [ @item ] } }
+   tag_body_chars_base : /[^\x{25c6}\/]+/               { $return = { data => [ @item ] } }
+
 
     tag_start_B    : RHOMBUS 'b' SLASH RHOMBUS
     tag_end_B      : RHOMBUS SLASH  'b' RHOMBUS
@@ -172,6 +177,16 @@ sub _to_html_tag_ruby {
 sub _to_html_tag_caption {
     my($self, $items) = @_;
     join '', '(', $self->stack_walker($items), ')';
+}
+
+sub _to_html_tag_body_chars {
+    my($self, $rhombus, $items) = @_;
+    join '', $rhombus, $self->stack_walker($items);
+}
+
+sub _to_html_tag_body_chars_base {
+    my($self, $text) = @_;
+    $text;
 }
 
 sub _to_html_tag_body_phrase {
