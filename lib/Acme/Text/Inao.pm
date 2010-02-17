@@ -148,25 +148,23 @@ __END__
 
 =head1 NAME
 
-Acme::Text::Inao -
+Acme::Text::Inao - inao text formatter
 
 =head1 SYNOPSIS
 
-  use Acme::Text::Inao;
+  $ inao2html genko.txt > genko.html
+  $ inaostat genko.txt
 
 =head1 DESCRIPTION
 
-Acme::Text::Inao is
+稲生記法をサポートして快適に原稿生活を送ろう。
 
 =head1 AUTHOR
 
-Default Name E<lt>default {at} example.comE<gt>
-
-=head1 SEE ALSO
+Yappo
 
 =head1 LICENSE
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+?
 
 =cut
