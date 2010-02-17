@@ -28,6 +28,10 @@ my $_inao_syntax = q(
 );
 
 my $inao_syntax = q(
+
+    list: tag_start_list list_body(s) /[^\n]+/ tag_end_list { $return = { data => [ $item[0], $item[2], $item[3] ] } }
+    list_body: /[^\n]+/ ...!tag_end_list LF {  $return = { data => [ $item[0], "$item[1]$item[3]" ] } }
+
     paragraph  : line(s)                               { $return = { data => [ @item ] } }
     line       : brank
                | SPACE phrase(s?) LF                   { $return = { data => [ $item[0], $item[1], $item[2] ] } }
@@ -39,7 +43,8 @@ my $inao_syntax = q(
     tag_phrase : chars(s) tags      { $return = { data => [ @item ] } }
     semi_phrase: chars(s) MARU                            { $return = { data => [ @item ] } }
                | chars(s) TEN                             { $return = { data => [ @item ] } }
-    chars      : /[^\x{3000}-\x{3002}\x{25c6}]+/               { $return = { data => [ @item ] } }
+    chars      : /[^\x{3000}-\x{3002}\x{25c6}\n]+/               { $return = { data => [ @item ] } }
+    all_chars_without_lf: /[^\n]+/
 
     tags    : tag_body      { $return = { data => [ @item ] } }
             | tag_caption      { $return = { data => [ @item ] } }
@@ -56,7 +61,7 @@ my $inao_syntax = q(
                    | tag_body_chars(s)       { $return = { data => [ @item ] } }
 
    tag_body_chars : RHOMBUS tag_body_chars_base(s)      { $return = { data => [ @item ] } }
-   tag_body_chars_base : /[^\x{25c6}\/]+/               { $return = { data => [ @item ] } }
+   tag_body_chars_base : /[^\x{25c6}\n\/]+/               { $return = { data => [ @item ] } }
 
 
     tag_start_B    : RHOMBUS 'b' SLASH RHOMBUS
@@ -73,6 +78,9 @@ my $inao_syntax = q(
 
     tag_start_RUBY : RHOMBUS 'ルビ' SLASH RHOMBUS
     tag_end_RUBY   : RHOMBUS SLASH  'ルビ' RHOMBUS
+
+    tag_start_list : LF RHOMBUS 'list' SLASH RHOMBUS LF
+    tag_end_list   : LF RHOMBUS SLASH  'list' RHOMBUS LF
 
     SPACE      : /\x{3000}/
     TEN        : /\x{3001}/
@@ -148,6 +156,15 @@ sub _to_html_brank {
 sub _to_html_line {
     my($self, $prefix, $items) = @_;
     join '', '<P>', $prefix, $self->stack_walker($items), '</P>', "\n";
+}
+
+sub _to_html_list {
+    my($self, $items, $text) = @_;
+    join '', '<PRE>', $self->stack_walker($items), $text, '</PRE>', "\n";
+}
+sub _to_html_list_body {
+    my($self, $text) = @_;
+    $text;
 }
 
 sub _to_html_phrase {
