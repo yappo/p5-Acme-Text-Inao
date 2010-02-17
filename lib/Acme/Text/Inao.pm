@@ -149,18 +149,7 @@ sub _to_html_dispatcher {
 
 sub _to_html_paragraph {
     my($self, $items) = @_;
-    my $html = '';
-    for my $data (@{ $items }) {
-        $html .= $self->_to_html_dispatcher($data->{data});
-    }
-    return $html;
-    for my $data (@{ $items }) {
-        if (ref($data)) {
-        } else {
-            $html .= join '', '<P>', $data, "</P>\n";
-        }
-    }
-    $html;
+    join '', $self->stack_walker($items);
 }
 
 sub _to_html_line {
