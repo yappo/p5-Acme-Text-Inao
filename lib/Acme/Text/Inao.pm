@@ -171,47 +171,27 @@ sub _to_html_section1 {
     join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
 }
 sub _to_html_content1 { shift->_stack_walker_with_merge(@_) }
-sub _to_html_section2 {
-    my($self, $head, $items) = @_;
-    join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
-}
-sub _to_html_content2 { shift->_stack_walker_with_merge(@_) }
-sub _to_html_section3 {
-    my($self, $head, $items) = @_;
-    join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
-}
-sub _to_html_content3 { shift->_stack_walker_with_merge(@_) }
-sub _to_html_column_section {
-    my($self, $head, $items) = @_;
-    join '', $self->_to_html_dispatcher($head->{data}), $self->stack_walker($items);
-}
-sub _to_html_column_content { shift->_stack_walker_with_merge(@_) }
+sub _to_html_section2 { shift->_to_html_section1(@_) }
+sub _to_html_content2 { shift->_to_html_content1(@_) }
+sub _to_html_section3 { shift->_to_html_section1(@_) }
+sub _to_html_content3 { shift->_to_html_content1(@_) }
+sub _to_html_column_section { shift->_to_html_section1(@_) }
+sub _to_html_column_content { shift->_to_html_content1(@_) }
 
-sub _to_html_head1 {
-    my($self, $text) = @_;
-    join '', '<H1>', $text, '</H1>', "\n";
+sub _head_base {
+    my($self, $name, $text) = @_;
+    join '', '<', $name, '>', $text, '</', $name, '>', "\n";
 }
-sub _to_html_head2 {
-    my($self, $text) = @_;
-    join '', '<H2>', $text, '</H2>', "\n";
-}
-sub _to_html_head3 {
-    my($self, $text) = @_;
-    join '', '<H3>', $text, '</H3>', "\n";
-}
-sub _to_html_column_head {
-    my($self, $text) = @_;
-    join '', '<H1>', $text, '</H1>', "\n";
-}
+sub _to_html_head1 { shift->_head_base('H1', @_) }
+sub _to_html_head2 { shift->_head_base('H2', @_) }
+sub _to_html_head3 { shift->_head_base('H3', @_) }
+sub _to_html_column_head { shift->_head_base('H1', @_) }
 
 sub _to_html_list {
     my($self, $items, $text) = @_;
     join '', '<PRE>', $self->stack_walker($items), $text, '</PRE>', "\n";
 }
-sub _to_html_list_body {
-    my($self, $text) = @_;
-    $text;
-}
+sub _to_html_list_body { shift->_to_html_chars(@_) }
 
 sub _to_html_ul {
     my($self, $items) = @_;
@@ -263,10 +243,7 @@ sub _to_html_tag_body_chars {
     join '', $rhombus, $self->stack_walker($items);
 }
 
-sub _to_html_tag_body_chars_base {
-    my($self, $text) = @_;
-    $text;
-}
+sub _to_html_tag_body_chars_base { shift->_to_html_chars(@_) }
 
 sub _to_html_tag_body_phrase { shift->_stack_walker_with_merge(@_) }
 
