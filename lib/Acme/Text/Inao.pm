@@ -32,6 +32,9 @@ my $inao_syntax = q(
     list: tag_start_list list_body(s) all_chars_without_lf tag_end_list { $return = { data => [ $item[0], $item[2], $item[3] ] } }
     list_body: all_chars_without_lf ...!tag_end_list LF {  $return = { data => [ $item[0], "$item[1]$item[3]" ] } }
 
+    ul: li(s) LF { $return = { data => [ @item ] } }
+    li: LF LI_DOT all_chars_without_lf ...LF { $return = { data => [ $item[0], $item[3] ] } }
+
     paragraph  : line(s)                               { $return = { data => [ @item ] } }
     line       : brank
                | SPACE phrase(s?) LF                   { $return = { data => [ $item[0], $item[1], $item[2] ] } }
@@ -87,6 +90,7 @@ my $inao_syntax = q(
     MARU       : /\x{3002}/
     SQUARE     : /\x{25a0}/
     RHOMBUS    : /\x{25c6}/
+    LI_DOT     : /\x{30fb}/
     SLASH      : /\//
     LF         : /\n/
 
@@ -165,6 +169,16 @@ sub _to_html_list {
 sub _to_html_list_body {
     my($self, $text) = @_;
     $text;
+}
+
+sub _to_html_ul {
+    my($self, $items) = @_;
+    join '', '<UL>', $self->stack_walker($items), '</UL>', "\n";
+}
+
+sub _to_html_li {
+    my($self, $text) = @_;
+    join '', '<LI>', $text, '</LI>';
 }
 
 sub _to_html_phrase {
