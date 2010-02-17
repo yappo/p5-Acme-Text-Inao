@@ -40,7 +40,7 @@ my $inao_syntax = q(
     ul: li(s) LF { $return = { data => [ @item ] } }
     li: LF LI_DOT all_chars_without_lf ...LF { $return = { data => [ $item[0], $item[3] ] } }
 
-    paragraph  : line(s)                            { $return = { data => [ $item[0], $item[2] ] } }
+    paragraph  : LF line(s)                            { $return = { data => [ $item[0], $item[2] ] } }
     line       : brank
                | SPACE phrase(s?) LF                   { $return = { data => [ $item[0], $item[1], $item[2] ] } }
     brank      : LF                                    { $return = { data => [ @item ] } }
