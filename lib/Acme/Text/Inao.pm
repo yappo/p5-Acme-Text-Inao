@@ -35,6 +35,7 @@ my $inao_syntax = q(
     phrase     : tag_phrase(s)                         { $return = { data => [ @item ] } }
                | semi_phrase(s)                        { $return = { data => [ @item ] } }
     tag_phrase : chars(s) tag_body      { $return = { data => [ @item ] } }
+               | chars(s) tag_caption   { $return = { data => [ @item ] } }
                | chars(s) tag_ruby      { $return = { data => [ @item ] } }
     semi_phrase: chars(s) MARU                            { $return = { data => [ @item ] } }
                | chars(s) TEN                             { $return = { data => [ @item ] } }
@@ -44,6 +45,7 @@ my $inao_syntax = q(
             | tag_start_I tag_body_phrase(s) tag_end_I     { $return = { data => [ $item[0], 'I', $item[2] ] } }
             | tag_start_CMD tag_body_phrase(s) tag_end_CMD     { $return = { data => [ $item[0], 'CMD', $item[2] ] } }
     tag_ruby : tag_start_RUBY chars(s) RHOMBUS chars(s) tag_end_RUBY    { $return = { data => [ $item[0], $item[2], $item[4] ] } }
+    tag_caption : tag_start_caption tag_body_phrase(s) tag_end_caption     { $return = { data => [ $item[0], $item[2] ] } }
 
     tag_body_phrase: semi_phrase(s) { $return = { data => [ @item ] } }
                    | chars(s)       { $return = { data => [ @item ] } }
@@ -56,6 +58,9 @@ my $inao_syntax = q(
 
     tag_start_CMD  : RHOMBUS 'cmd' SLASH RHOMBUS
     tag_end_CMD    : RHOMBUS SLASH  'cmd' RHOMBUS
+
+    tag_start_caption    : RHOMBUS '注' SLASH RHOMBUS
+    tag_end_caption      : RHOMBUS SLASH  '注' RHOMBUS
 
     tag_start_RUBY : RHOMBUS 'ルビ' SLASH RHOMBUS
     tag_end_RUBY   : RHOMBUS SLASH  'ルビ' RHOMBUS
@@ -162,6 +167,11 @@ sub _to_html_tag_body {
 sub _to_html_tag_ruby {
     my($self, $word, $ruby) = @_;
     join '', $self->stack_walker($word), '(', $self->stack_walker($ruby), ')';
+}
+
+sub _to_html_tag_caption {
+    my($self, $items) = @_;
+    join '', '(', $self->stack_walker($items), ')';
 }
 
 sub _to_html_tag_body_phrase {

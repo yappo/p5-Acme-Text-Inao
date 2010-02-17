@@ -74,5 +74,13 @@ subtest 'タグ付きパラグラフ' => sub {
     done_testing;
 };
 
+subtest 'キャプション付きパラグラフ' => sub {
+    my $text     = "　文章の${rhombus}注/${rhombus}ここは注約なんです${rhombus}/注${rhombus}だよ。\n";
+    my $expected = "<P>　文章の(ここは注約なんです)だよ。</P>\n";
+    is $inao->from_inao($text)->to_html, $expected;
+
+    done_testing;
+};
+
 done_testing;
 
