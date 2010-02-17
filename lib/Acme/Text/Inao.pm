@@ -3,29 +3,13 @@ use strict;
 use warnings;
 our $VERSION = '0.01';
 
-use Data::Dumper;
 use Parse::RecDescent;
-
-my $square = "\x{25a0}";
 
 use utf8;
 $::RD_HINT = 1;
 #$::RD_TRACE = 1;
-$::RD_WARN = sub { warn Dumper(\@_) };
+#$::RD_WARN = sub { warn Dumper(\@_) };
 $Parse::RecDescent::skip = '';
-
-my $_inao_syntax = q(
-    body       : section(s)     { warn "aaa body"; warn Data::Dumper::Dumper(\@item); $return = $item[1] }
-    section    : line(s)        { warn "aaa section"; warn Data::Dumper::Dumper(\@item); $return = $item[1] }
-    paragraph  : line(s)                { \@item }
-    line       : /\x{3000}[^\n]+\x{3002}/s "\\n"       { $return = $item[1] }
-    aline       : SPACE phrase(s?)       { $return = $item[2] }
-    phrase     : /^[^\x{3000}\x{3002}][^\x{3002}]+?/ { $return = $item[1] }
-    char       : /./ { $return = $item[1] }
-    SPACE      : /\x{3000}/ { warn "space"; $return = "SPACE" }
-    MARU       : /\x{3002}/ { warn "MARU" ; $return = "MARU" }
-    SQUARE     : /\x{25a0}/     { warn "bbb" }
-);
 
 my $inao_syntax = q(
 
@@ -67,7 +51,6 @@ my $inao_syntax = q(
 
     paragraph  : LF line(s)                            { $return = { data => [ $item[0], $item[2] ] } }
     line       : SPACE phrase(s?) LF                   { $return = { data => [ $item[0], $item[1], $item[2] ] } }
-    brank      : LF                                    { $return = { data => [ @item ] } }
     phrase     : tag_phrase(s)                         { $return = { data => [ @item ] } }
                | semi_phrase(s)                        { $return = { data => [ @item ] } }
                | tags(s)                        { $return = { data => [ @item ] } }
@@ -137,8 +120,6 @@ sub from_inao {
     local $Parse::RecDescent::skip = $self->{parser_skip};
 
     $self->{parsed} = $parser->$start($text);
-#warn Dumper($self->{parsed});
-#die;
     $self;
 }
 
@@ -180,10 +161,6 @@ sub _to_html_paragraph {
         }
     }
     $html;
-}
-
-sub _to_html_brank {
-    "<BR />\n";
 }
 
 sub _to_html_line {
@@ -326,57 +303,6 @@ sub _to_html_chars {
     my($self, $text) = @_;
     $text;
 }
-
-1;
-
-__END__
-
-sub body {
-    my($self, $items) = @_;
-warn Dumper($items);
-}
-
-sub section {
-    my($self, $items) = @_;
-#warn Dumper($items);
-}
-
-sub head1 {
-    my($self, $items) = @_;
-warn Dumper($items, "head1");
-}
-sub section1 {
-    my($self, $items) = @_;
-warn Dumper($items, "section1");
-}
-
-sub head2 {
-    my($self, $items) = @_;
-warn Dumper($items, "head2");
-}
-sub section2 {
-    my($self, $items) = @_;
-warn Dumper($items, "section2");
-}
-
-sub head3 {
-    my($self, $items) = @_;
-warn Dumper($items, "head3");
-}
-sub section3 {
-    my($self, $items) = @_;
-warn Dumper($items, "section3");
-}
-
-sub head4 {
-    my($self, $items) = @_;
-warn Dumper($items, "head4");
-}
-sub column {
-    my($self, $items) = @_;
-warn Dumper($items, "column");
-}
-
 
 1;
 __END__
