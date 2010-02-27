@@ -8,3 +8,6 @@ __DATA__
 Default Name
 default {at} example.com
 Acme::Text::Inao
+inao
+Yappo
+

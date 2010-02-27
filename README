@@ -1,17 +1,16 @@
 NAME
-    Acme::Text::Inao -
+    Acme::Text::Inao - inao text formatter
 
 SYNOPSIS
-      use Acme::Text::Inao;
+      $ inao2html genko.txt > genko.html
+      $ inaostat genko.txt
 
 DESCRIPTION
-    Acme::Text::Inao is
+    稲尾記法をサポートして快適に原稿生活を送ろう。
 
 AUTHOR
-    Default Name <default {at} example.com>
+    Yappo
 
-SEE ALSO
 LICENSE
-    This library is free software; you can redistribute it and/or modify it
-    under the same terms as Perl itself.
+    ?
 
