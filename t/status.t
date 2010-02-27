@@ -61,8 +61,8 @@ is_deeply $inao->from_inao($text)->to_status, {
     body_length => 30+28+12+16+7+12+33,
     length      => undef,
     lines       => 33,
-    pages       => 0.63,
-    raw_pages   => 0.36,
+    pages       => 0.66,
+    raw_pages   => 0.39,
 };
 
 done_testing;

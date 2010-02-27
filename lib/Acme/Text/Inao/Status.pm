@@ -28,8 +28,8 @@ sub add_length {
 sub add_lines {
     my($self, $lines) = @_;
     $self->{status}->{lines} += $lines;
-    $self->{status}->{pages}     = int((($self->{status}->{lines} + 24) / 90) * 100 ) / 100;
-    $self->{status}->{raw_pages} = int(($self->{status}->{lines} / 90)        * 100 ) / 100;
+    $self->{status}->{pages}     = int((($self->{status}->{lines} + 23) / 84) * 100 ) / 100;
+    $self->{status}->{raw_pages} = int(($self->{status}->{lines} / 84)        * 100 ) / 100;
 }
 
 sub _head1 { shift->add_lines(3) }
