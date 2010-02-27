@@ -157,7 +157,7 @@ Acme::Text::Inao - inao text formatter
 
 =head1 DESCRIPTION
 
-稲生記法をサポートして快適に原稿生活を送ろう。
+稲尾記法をサポートして快適に原稿生活を送ろう。
 
 =head1 AUTHOR
 
